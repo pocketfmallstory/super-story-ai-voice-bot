@@ -16,10 +16,9 @@ import edge_tts
 TOKEN = os.getenv("BOT_TOKEN")
 
 VOICES = {
-    "male": "en-US-GuyNeural",
-    "female": "en-US-JennyNeural",
+    "male": "hi-IN-MadhurNeural",
+    "female": "hi-IN-SwaraNeural",
 }
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [[
         InlineKeyboardButton("Male voice", callback_data="male"),
