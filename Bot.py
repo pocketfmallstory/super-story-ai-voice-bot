@@ -25,21 +25,20 @@ VOICES = {
 }
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
-keyboard = [
-    [
-        InlineKeyboardButton("Male voice", callback_data="male"),
-        InlineKeyboardButton("Female voice", callback_data="female"),
-    ],
-    [
-        InlineKeyboardButton("Boy voice", callback_data="boy"),
-        InlineKeyboardButton("Girl voice", callback_data="girl"),
-    ],
-    [
-        InlineKeyboardButton("Deep male voice", callback_data="deep_male"),
-        InlineKeyboardButton("Soft female voice", callback_data="soft_female"),
-    ],
-]
+    keyboard = [
+        [
+            InlineKeyboardButton("Male voice", callback_data="male"),
+            InlineKeyboardButton("Female voice", callback_data="female"),
+        ],
+        [
+            InlineKeyboardButton("Boy voice", callback_data="boy"),
+            InlineKeyboardButton("Girl voice", callback_data="girl"),
+        ],
+        [
+            InlineKeyboardButton("Deep male voice", callback_data="deep_male"),
+            InlineKeyboardButton("Soft female voice", callback_data="soft_female"),
+        ],
+    ]
 
     context.user_data["voice"] = context.user_data.get("voice", "female")
     await update.message.reply_text(
