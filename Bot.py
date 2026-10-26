@@ -82,29 +82,70 @@ async def choose_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     context.user_data["voice"] = choice
     await query.message.reply_text(f"Voice selected: {choice}")
+
 async def narrate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     script = (update.message.text or "").strip()
     if not script:
         return
+
     if len(script) > 4000:
-        await update.message.reply_text("Please send a shorter script (maximum 4000 characters).")
+        await update.message.reply_text(
+            "Please send a shorter script (maximum 4000 characters)."
+        )
         return
 
     voice = context.user_data.get("voice", "female")
-    await update.message.reply_text("🎧 Creating your narration...")
+    mode = context.user_data.get("mode", "single")
+
+    progress_msg = await update.message.reply_text(
+        "🎧 Creating your narration...\n"
+        "📊 Progress: 0%"
+    )
 
     path = None
+
     try:
-        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+        with tempfile.NamedTemporaryFile(
+            suffix=".mp3", delete=False
+        ) as f:
             path = f.name
-        communicate = edge_tts.Communicate(script, VOICES[voice])
-        await communicate.save(path)
-        with open(path, "rb") as audio:
-            await update.message.reply_audio(audio=audio, title="Story narration")
-    except Exception:
-        await update.message.reply_text(
-            "Audio generation failed. Please try again later."
+
+        await progress_msg.edit_text(
+            "🎙️ Preparing your voice...\n"
+            "📊 Progress: 10%"
         )
+
+        communicate = edge_tts.Communicate(script, VOICES[voice])
+
+        await progress_msg.edit_text(
+            "🎙️ Generating narration...\n"
+            "📊 Progress: 25%"
+        )
+
+        await communicate.save(path)
+
+        await progress_msg.edit_text(
+            "📤 Uploading your audio...\n"
+            "📊 Progress: 85%"
+        )
+
+        with open(path, "rb") as audio:
+            await update.message.reply_audio(
+                audio=audio,
+                title="Story narration"
+            )
+
+        await progress_msg.edit_text(
+            "✅ Narration complete!\n"
+            "🎧 Your audio is ready."
+        )
+
+    except Exception:
+        await progress_msg.edit_text(
+            "❌ Audio generation failed.\n"
+            "Please try again later."
+        )
+
     finally:
         if path and os.path.exists(path):
             os.remove(path)
