@@ -18,7 +18,12 @@ TOKEN = os.getenv("BOT_TOKEN")
 VOICES = {
     "male": "hi-IN-MadhurNeural",
     "female": "hi-IN-SwaraNeural",
+    "boy": "hi-IN-MadhurNeural",
+    "girl": "hi-IN-SwaraNeural",
+    "deep_male": "hi-IN-MadhurNeural",
+    "soft_female": "hi-IN-SwaraNeural",
 }
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [[
         InlineKeyboardButton("Male voice", callback_data="male"),
