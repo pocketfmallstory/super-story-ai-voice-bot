@@ -23,23 +23,29 @@ VOICES = {
     "deep_male": "hi-IN-MadhurNeural",
     "soft_female": "hi-IN-SwaraNeural",
 }
+VOICE_MODES = {
+    "single": "🎙️ Single Voice",
+    "multi": "🎭 Multi-Character Voice",
+}
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [
-        [
-            InlineKeyboardButton("Male voice", callback_data="male"),
-            InlineKeyboardButton("Female voice", callback_data="female"),
-        ],
-        [
-            InlineKeyboardButton("Boy voice", callback_data="boy"),
-            InlineKeyboardButton("Girl voice", callback_data="girl"),
-        ],
-        [
-            InlineKeyboardButton("Deep male voice", callback_data="deep_male"),
-            InlineKeyboardButton("Soft female voice", callback_data="soft_female"),
-        ],
-    ]
-
+keyboard = [
+    [
+        InlineKeyboardButton("🎙️ Single Voice", callback_data="mode_single"),
+        InlineKeyboardButton("🎭 Multi-Character Voice", callback_data="mode_multi"),
+    ],
+    [
+        InlineKeyboardButton("Male voice", callback_data="male"),
+        InlineKeyboardButton("Female voice", callback_data="female"),
+    ],
+    [
+        InlineKeyboardButton("Boy voice", callback_data="boy"),
+        InlineKeyboardButton("Girl voice", callback_data="girl"),
+    ],
+    [
+        InlineKeyboardButton("Deep male voice", callback_data="deep_male"),
+        InlineKeyboardButton("Soft female voice", callback_data="soft_female"),
+    ],
+]
     context.user_data["voice"] = context.user_data.get("voice", "female")
     await update.message.reply_text(
         "🎙️ Welcome to Super Story AI Voice Bot!\n\n"
