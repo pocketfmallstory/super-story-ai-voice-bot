@@ -1,7 +1,9 @@
 
+
 import os
 import asyncio
 import tempfile
+
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -23,10 +25,12 @@ VOICES = {
     "deep_male": "hi-IN-MadhurNeural",
     "soft_female": "hi-IN-SwaraNeural",
 }
+
 VOICE_MODES = {
     "single": "🎙️ Single Voice",
     "multi": "🎭 Multi-Character Voice",
 }
+
 CHARACTER_VOICES = {
     "Narrator": "hi-IN-SwaraNeural",
     "Hero": "hi-IN-MadhurNeural",
@@ -52,6 +56,9 @@ keyboard = [
         InlineKeyboardButton("Soft female voice", callback_data="soft_female"),
     ],
 ]
+
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["voice"] = context.user_data.get("voice", "female")
     await update.message.reply_text(
         "🎙️ Welcome to Super Story AI Voice Bot!\n\n"
@@ -59,6 +66,7 @@ keyboard = [
         "Choose your voice below.",
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
+
 
 async def choose_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
