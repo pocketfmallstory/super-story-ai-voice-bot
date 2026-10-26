@@ -27,6 +27,12 @@ VOICE_MODES = {
     "single": "🎙️ Single Voice",
     "multi": "🎭 Multi-Character Voice",
 }
+CHARACTER_VOICES = {
+    "Narrator": "hi-IN-SwaraNeural",
+    "Hero": "hi-IN-MadhurNeural",
+    "Heroine": "hi-IN-SwaraNeural",
+    "Villain": "hi-IN-PrabhatNeural",
+}
 
 keyboard = [
     [
@@ -82,6 +88,34 @@ async def choose_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     context.user_data["voice"] = choice
     await query.message.reply_text(f"Voice selected: {choice}")
+
+def split_character_dialogue(script):
+    segments = []
+
+    character_map = {
+        "narrator": "Narrator",
+        "hero": "Hero",
+        "heroine": "Heroine",
+        "villain": "Villain",
+    }
+
+    for line in script.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+
+        if ":" in line:
+            name, dialogue = line.split(":", 1)
+            character = character_map.get(name.strip().lower())
+            dialogue = dialogue.strip()
+
+            if character and dialogue:
+                segments.append((character, dialogue))
+                continue
+
+        segments.append(("Narrator", line))
+
+    return segments
 
 async def narrate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     script = (update.message.text or "").strip()
