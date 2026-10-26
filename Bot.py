@@ -57,9 +57,31 @@ keyboard = [
 async def choose_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    context.user_data["voice"] = query.data
-    await query.message.reply_text(f"Voice selected: {query.data}")
 
+    choice = query.data
+
+    if choice == "mode_single":
+        context.user_data["mode"] = "single"
+        await query.message.reply_text(
+            "🎙️ Single Voice mode selected!\n"
+            "Ab story ka text bhejo."
+        )
+        return
+
+    if choice == "mode_multi":
+        context.user_data["mode"] = "multi"
+        await query.message.reply_text(
+            "🎭 Multi-Character Voice mode selected!\n\n"
+            "Dialogue is format mein bhejo:\n"
+            "Narrator: Ek din ek hero aaya.\n"
+            "Hero: Main tumhe bachaunga!\n"
+            "Heroine: Mujhe tum par bharosa hai.\n"
+            "Villain: Tum mujhe nahi hara sakte!"
+        )
+        return
+
+    context.user_data["voice"] = choice
+    await query.message.reply_text(f"Voice selected: {choice}")
 async def narrate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     script = (update.message.text or "").strip()
     if not script:
